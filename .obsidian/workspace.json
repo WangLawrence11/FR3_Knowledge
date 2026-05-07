@@ -1,0 +1,231 @@
+{
+  "main": {
+    "id": "259fb5362a42c955",
+    "type": "split",
+    "children": [
+      {
+        "id": "83407d5040fdd61b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fc082d8fe19f9a99",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "專題/papers.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "papers"
+            }
+          }
+        ]
+      },
+      {
+        "id": "8057518d8282df20",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "92362eb1fa4ad7f1",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "關聯圖檢視"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2b2595b8fda0f36c",
+    "type": "split",
+    "children": [
+      {
+        "id": "07268eb367efa9d2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "52131dd3885ccdf8",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "檔案瀏覽器"
+            }
+          },
+          {
+            "id": "42cb4d418454dcf2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜尋"
+            }
+          },
+          {
+            "id": "6c8af434b1072360",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "書籤"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "70eb39f82cd8f957",
+    "type": "split",
+    "children": [
+      {
+        "id": "1f16abc72de6529e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "16d94e2f7d169e9b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "專題/papers.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "papers 的反向連結"
+            }
+          },
+          {
+            "id": "d48210931d42d48b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "專題/papers.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "papers 的對外連結"
+            }
+          },
+          {
+            "id": "352bb28b15c55a8b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "標籤"
+            }
+          },
+          {
+            "id": "3dc42ae9262da437",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "所有屬性"
+            }
+          },
+          {
+            "id": "f4530207aa0ae4bf",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "專題/papers.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "papers 的大綱"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "bases:建立新的 base": false
+    }
+  },
+  "active": "fc082d8fe19f9a99",
+  "lastOpenFiles": [
+    "專題/gitignore .txt",
+    "專題/新增 文字文件.txt",
+    "papers/合併檔/auto/合併檔_span.pdf",
+    "papers/合併檔/auto/合併檔_layout.pdf",
+    "papers/合併檔/auto/合併檔_origin.pdf",
+    "papers/合併檔/auto/images/90d04a933f4fe520cad65a4aca96cab31d7eaa2a0c2151ca527064b4405dea66.jpg",
+    "papers/合併檔/auto/images/7da7ceca76b565586347f7eda3d917f50b669514b3dc8311df6caa01c2bc1e77.jpg",
+    "papers/合併檔/auto/images/7d37e784de2e504000dcebe22aa86f53817d157a0cb10717b57c5fc21d722359.jpg",
+    "papers/合併檔/auto/images/78cb94c28c52060eee4379f5c52c272b5dda251fba237ad0591f53dc3dd61f29.jpg",
+    "papers/合併檔/auto/images/6b0569d44f4f96b3ea73c266c22fadddc8eb730eb2cfc7595d4ef9a3f12680ac.jpg",
+    "papers/合併檔/auto/images/5b21c877a2859df33dbe97e77a8795ab906c9b1802ab188404706066a4881041.jpg",
+    "papers/合併檔/auto/images/53708b9ec795aa6648d472c66806329ce708866527dfee31168fb5ab0f6e13e8.jpg",
+    "papers/合併檔/auto/images/5303438d0e238b9ae9681bccdc8d6ca5c1d993a04bb73df87a860484cd44d051.jpg",
+    "papers/合併檔/auto/images/511f54a2e41a59b8fcc6b987060925b64bcaa7acdb065eaf9f0f9810d0b228be.jpg",
+    "papers/合併檔/auto/images/4c34269ef4aa661a012ab605f59ac766b8d6536142ae929e466743ab0317c66c.jpg",
+    "papers/合併檔/auto/合併檔_content_list.json",
+    "papers/合併檔/auto/合併檔_content_list_v2.json",
+    "papers/合併檔/auto/合併檔_model.json",
+    "papers/合併檔/auto/合併檔_middle.json",
+    "papers/合併檔/auto/合併檔.md",
+    "papers/合併檔/auto/images",
+    "papers/合併檔/auto",
+    "專題/research 筆記.md",
+    "專題/GEMINI.md.md",
+    "專題/papers.md",
+    "歡迎.md"
+  ]
+}
