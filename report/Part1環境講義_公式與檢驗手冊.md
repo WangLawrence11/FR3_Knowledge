@@ -308,14 +308,16 @@ $$
 |---|---|---|---|
 | $K$（NLOS 路徑數） | 3 | [T3 設計選擇] FR3 稀疏、少數主導 MPC（Shakya ASA 15.3°≪3GPP 47°）；窄波束只收少數路徑。⚠️ Shakya 未給「K=?」 | $K\in\{1,3,5\}$ |
 | 每牆取樣點數 | 5 | [T3 設計選擇] 空間解析 vs 計算成本折衷 | — |
+| `reflectHeight`（散射點高度） | 1.5 m | [T3 設計選擇] **街道層反射**：放在車輛平面（車高亦 1.5 m），模擬街道峽谷側牆的街道層反射。⚠️ **會影響 NLOS 仰角** $\text{el}_{tx}=\arctan\frac{10-1.5}{\cdot}$ → 影響仰角波束選擇（非零影響參數）。無文獻規定散射點高度 | $\in\{1.5, 5, 10\}$ m |
 | $d_{offset}$（探針距離） | 0.5 m | ✅ **非物理參數**：只是「測牆是否面向街道」的探針，**對 SNR/相位零影響**（散射點在牆面上）。任何 $0<值<$路寬 等效 → **無需文獻、無需敏感度掃描** | 不適用 |
 | `reflectLoss` | 0 | 反射代價已含於 §3 的 $n_{NLOS}$ 斜率（見上 🔑） | — |
 
 ### ②½ 程式對應
 | 內容 | 檔案 | 位置 |
 |---|---|---|
-| 牆面取樣+外推 `scatterOffsetDist`+落路保留 | `env/generateScatterers.m` | 主迴圈（每牆 5 點、linspace 0.1–0.9 避角；第 35–50 行） |
-| **單次反射損耗 `reflectLoss = 0`**（每點第 4 欄 loss；2026-07-16 6→0，反射已含於 §3 n_NLOS 斜率） | `env/generateScatterers.m` | 第 31 行 |
+| 牆面取樣 + 探針測朝向 + 落路保留 | `env/generateScatterers.m` | 主迴圈第 49–72 行（每牆 4 面 × 5 點、linspace 0.1–0.9 避角；探針 q 測 `pointInRoads`，存牆面點 px,py） |
+| **單次反射損耗 `reflectLoss = 0`**（每點第 4 欄 loss；2026-07-16 6→0，反射已含於 §3 n_NLOS 斜率） | `env/generateScatterers.m` | 第 36 行 |
+| **散射點高度 `reflectHeight = 1.5 m`**（每點第 3 欄 z；街道層、影響 NLOS 仰角）[T3 設計選擇] | `env/generateScatterers.m` | 第 27 行 |
 | `scatterOffsetDist` 定義（**牆面朝向探針，非物理參數**） | `config.m` | 值 0.5 m；2026-07-16 重新定性：對 SNR/相位零影響、無需文獻與敏感度掃描 |
 | 路廊判定 | `env/generateScatterers.m` | 內部函式 `pointInRoads` |
 | top-3 最近選擇 | `env/channelModelV2.m` | 第 61–69 行（sort 距離取前 3；標註 [T3 暫定設計，Q3 待驗證]） |
