@@ -449,6 +449,18 @@ $$
 
 **量測抖動**：實際量測值 $\hat{P}_{echo} = P_{echo}\cdot 10^{\xi/10}$，$\xi\sim\mathcal{N}(0, 1\,\text{dB}^2)$（**1 dB 抖動為設計選擇**，代表感測殘餘量測不確定，無文獻直接出處）。
 
+**NLOS 穿透衰減**：當車輛被大樓遮擋（NLOS）時，感測回波穿過建築物牆體，強度衰減：
+
+$$
+P_{\text{echo,NLOS}} = P_{\text{echo,LOS}} \times \rho_{\text{NLOS}}, \quad \rho_{\text{NLOS}} = 0.3 \quad [-4.77\,\text{dB}]
+$$
+
+- **物理基礎**：電磁波穿透混凝土/磚牆的穿透係數。LOS 與 NLOS 的路徑損耗差異已在 Shakya2025 的 PLE（LOS=1.85, NLOS=2.59）中體現；穿透係數 ρ 額外捕捉**波被遮擋時的衰減**。
+- **出源等級**：**[T3] Bai-Heath 2014** (IEEE TWC, arXiv:1309.4141, "Analysis of Blockage Effects on Urban Cellular Networks") — 原為通訊穿透模型，邏輯可借用至雷達（都是電磁波穿過建築物）。
+- **設計選擇**：ρ=0.3 為保守設計；實際穿透因子因建築材質變化 ρ ∈ {0.1–0.5}。**Q3 2026 敏感度掃描**：`rho ∈ {0.1, 0.3, 0.5}`。
+
+> ⚠️ **誠實揭露**：無業界統一標準；各廠商自訂。本專題 ρ=0.3 屬**工程設計選擇**，需實驗驗證。
+
 > ⚠️ **修正記錄**：$P_{echo}$ 曾誤寫 $\propto|\mathbf{a}^H\mathbf{f}|^4$（誤設同一類比波束收發）。兩篇核心論文皆為數位接收 → 一個波束因子。修正使 $P_{echo}$ 與 $\mathrm{SNR}_{echo}$ 同次方（測試 `testEchoSignalV2` 以「比值不隨波束變」鎖住此性質）。
 
 ### ②½ 程式對應（`env/echoSignalV2.m`）
@@ -458,12 +470,14 @@ $$
 | $P_{echo}=P_{tx}\lvert\mathbf{a}^H\mathbf{f}\rvert^2\beta^2$（一次方） | `P_echo_ideal = ptx * bfGain * betaSq` |
 | $\mathrm{SNR}_{echo}$（匹配濾波 $G_{mf}$） | `snrEchoIdeal = matchedGain * bfGain * (ptx*betaSq) / n0` |
 | 量測抖動 $\xi\sim\mathcal{N}(0,1\text{dB}^2)$ | 同檔（`measStdDb` 乘 randn）；參數 `config.m` `MEAS_NOISE_STD_DB` |
+| **NLOS 穿透衰減** $\rho_{\text{NLOS}}$ | `if ~isLos, P_echo_ideal = P_echo_ideal * rho_NLOS; end` （待實作；參數 `config.m` `RHO_NLOS=0.3`，2026-07-17 新增）|
 | **$\sigma_{RCS}=25$ 參數** | **`config.m` `SIGMA_RCS`**（2026-07-17 新增；經 `myStep.m` 傳入 echoSignalV2 第 13 引數） |
 | $G_{mf}=10$ 參數 | `config.m` `MATCHED_GAIN_G` |
 
 ### ③ 出處
 - **MultiUser Eq.6/8b/10**（$\beta\propto\sqrt{\sigma_{rcs}/d^4}$、發射增益 $|\mathbf{a}^H\mathbf{f}|^2$）：[[notes/MultiUserBeamforming_DRL_Sensing]]（原文：`D:\PROJECTS\papers\核心論文\MultiUserBeamforming_DRL_Sensing\`）
 - **Zhao2024 Eq.2/6**（數位接收 $b(\theta)a^H(\theta)f$ + 匹配濾波）：[[notes/Zhao2024_IBTD_ISAC_V2V]]
+- **NLOS 穿透係數**（$\rho_{\text{NLOS}}=0.3$）：**Bai, T. et al.** (2014). *Analysis of Blockage Effects on Urban Cellular Networks*. IEEE Transactions on Wireless Communications, 13(3). arXiv:1309.4141, 作為**電磁波穿透建築物**的參考框架（**[T3] 設計選擇**，無業界統一標準）
 - 雷達方程式基礎：Skolnik, *Introduction to Radar Systems*
 > ✅ **$G_{mf}=10$ 已核原文（2026-07-16 更新，前版標「庫內查無」已過時）**：開 Zhao2024 原始論文 PDF（**IET Communications 2024, DOI 10.1049/cmu2.12835**）Table 1「Parameter settings」逐字比對——**Matched filter gain G = 10** 與 **a1=1, a2=a3=200** 皆逐值一致（原文該兩值標引用 [5]）。⚠️ 勿與計畫書 ref[8]（He et al., IEEE TWC 2026, V2I）混淆：那是另一篇不同論文。
 >
@@ -499,9 +513,13 @@ $$
 \mathrm{CRLB} \propto \frac{1}{N_t\, \mathrm{SNR}_{base}\, |\mathbf{a}^H\mathbf{f}|^2}
 $$
 
-正是計畫書 Eq.5 的形式。感測門檻 $\Gamma_{CRLB} = 3\times10^{-3}\ \text{rad}^2 \approx (\text{HPBW}/2)^2$——CRLB 超過它 ⟺ 角度誤差比半波束還寬 ⟺ 實質失明。
+正是計畫書 Eq.5 的形式。感測門檻 $\Gamma_{CRLB} = 3\times10^{-3}\ \text{rad}^2 \approx (\theta_{HPBW,\text{方位}}/2)^2$——CRLB 超過它 ⟺ 角度誤差比半個**方位**波束還寬 ⟺ 實質失明。
 
-> 🟡 **出處註記**：$\Gamma_{CRLB}=3\times10^{-3}$ 為**自推設計門檻**（由陣列 HPBW/2 推得，無文獻直接規定值）。⚠️ 專案報告另寫 2.7e-3，兩者略有出入待調和；此為感測「失明」判準的設計旋鈕，屬 Part 2 可調參數。
+> 🟡 **出處註記（2026-07-18 調和）**：$\Gamma_{CRLB}=3\times10^{-3}$ 為**設計選擇（design choice）**，非文獻規定值——三篇核心論文均未給定此門檻數值（MultiUser Eq(13) 的 th 原文亦未給值；計畫書 Eq(11) 僅寫符號 T）。
+> **推導（已更正軸向）**：追蹤關鍵維度為**方位角**（車沿街道運動；仰角受基地台高度約束、扇區僅 ±15°、變化慢）。方位維配 16 元件（`config.m` `ntAz`），boresight HPBW 數值量測 = **6.36°**，取 $(\text{HPBW}/2)^2=(\text{deg2rad}(6.36)/2)^2=3.08\times10^{-3}$，四捨五入 **3e-3**（吻合 97.5%）。
+> **軸向依據**：[T1] Shakya2025 @16.95 GHz 實測 BS 端 ASD 22–82° ≫ ZSD 8.5–13°（表V），角度分散集中於方位面；計畫書 (申請書.md:134) 僅載「16×8 配置」未定義軸向，故不牴觸。
+> **3e-3 vs 2.7e-3 之調和**：兩者為**同一推導的四捨五入差**（HPBW 因子 k=0.886~1.0 造成 6°→6.36° 的區間），非兩種算法；統一以量測值 6.36°→3e-3 為準。舊註「128 陣列 HPBW≈6°」誤導（HPBW 由單一維元件數決定，與 128 無關），已更正。
+> ⚠️ **關聯未解項（Q2/Q11，見 SPEC 1.4 註）**：回波尺度修正後 CRLB 中位恐降至 ~1e-6，使門檻在**任何值**下都幾乎不觸發（感測「太準」）——那是門檻**鑑別力**問題，屬 Part 2 待處理，與本次「軸向/推導更正」是兩件事。
 
 ### ②½ 程式對應
 | 內容 | 檔案 | 位置 |
@@ -563,8 +581,11 @@ $$
 
 ### ④ 檢驗
 ```matlab
-runtests('tests/testLinkSuccess.m')   % 邊界：SNR=15→過、14→不過
-linkSuccess(15,4), linkSuccess(14.9,4)
+% 主值 C_th=2 的邊界：SNR=3→過（log2(4)=2）、2.9→不過
+linkSuccess(3, 2), linkSuccess(2.9, 2)
+
+% 門檻是傳入參數而非寫死，故測試以 seThreshold=4 驗證邊界同樣合法
+runtests('tests/testLinkSuccess.m')   % 邊界：SNR=15→過、14→不過（此處 4 為測資，非主值）
 ```
 
 ---
